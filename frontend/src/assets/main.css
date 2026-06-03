@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand — golden yellow */
+  --color-brand-50:  #fffaf0;
+  --color-brand-100: #fff3df;
+  --color-brand-200: #ffe2b3;
+  --color-brand-300: #fdcd7e;
+  --color-brand-400: #fbb947;
+  --color-brand-500: #f9ac1b;
+  --color-brand-600: #e09a0e;
+  --color-brand-700: #b07807;
+  --color-brand-800: #7a4f08;
+  --color-brand-900: #402312;
+
+  /* Accent — magenta */
+  --color-accent-50:  #fdf2f7;
+  --color-accent-100: #fce7f0;
+  --color-accent-200: #fbcfdf;
+  --color-accent-500: #ec176c;
+  --color-accent-600: #d10e5e;
+  --color-accent-700: #a90849;
+
+  /* Cream — warm whites & tans */
+  --color-cream-50:  #fffbf5;
+  --color-cream-100: #fdf6ec;
+  --color-cream-200: #f9ecd6;
+  --color-cream-300: #f3e0bd;
+
+  /* Ink — warm browns */
+  --color-ink-500: #5c4838;
+  --color-ink-600: #4a3829;
+  --color-ink-900: #402312;
+
+  /* Typography */
+  --font-sans: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
+}
+
+html, body {
+  font-family: var(--font-sans);
+}
+
+body {
+  background-color: var(--color-cream-50);
+  color: var(--color-ink-900);
+}
+
+/* Decorative brand panel background — reused across all auth views */
+.brand-panel {
+  background:
+    radial-gradient(circle at 15% 20%, rgba(236, 23, 108, 0.35) 0%, transparent 35%),
+    radial-gradient(circle at 85% 85%, rgba(249, 172, 27, 0.45) 0%, transparent 40%),
+    linear-gradient(135deg, #402312 0%, #7a4f08 60%, #b07807 100%);
+}
+
+.brand-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.12) 1px, transparent 0);
+  background-size: 24px 24px;
+  pointer-events: none;
+}

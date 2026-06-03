@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SquarePeople — by Square Feet</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          brand: {
+            50:  '#fffaf0',
+            100: '#fff3df',
+            200: '#ffe2b3',
+            300: '#fdcd7e',
+            400: '#fbb947',
+            500: '#f9ac1b',
+            600: '#e09a0e',
+            700: '#b07807',
+            800: '#7a4f08',
+            900: '#402312',
+          },
+          accent: {
+            50:  '#fdf2f7',
+            100: '#fce7f0',
+            200: '#fbcfdf',
+            500: '#ec176c',
+            600: '#d10e5e',
+            700: '#a90849',
+          },
+          cream: {
+            50:  '#fffbf5',
+            100: '#fdf6ec',
+            200: '#f9ecd6',
+            300: '#f3e0bd',
+          },
+          ink: {
+            500: '#5c4838',
+            600: '#4a3829',
+            900: '#402312',
+          },
+        },
+        fontFamily: {
+          sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', 'sans-serif'],
+          mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        },
+      },
+    },
+  };
+</script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet" />
+<style>
+  body { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .nav-item.active { background-color: #fff3df; color: #7a4f08; font-weight: 600; }
+  .nav-item.active svg { color: #b07807; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #f3e0bd; border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: #e0c79a; }
+</style>
+</head>
+<body class="bg-cream-50 text-ink-900">
+
+<div class="flex h-screen overflow-hidden">
+
+  <!-- =================== SIDEBAR =================== -->
+  <aside class="w-64 bg-white border-r border-cream-200 flex flex-col flex-shrink-0">
+    <div class="px-6 py-5 border-b border-cream-200 flex items-center gap-3">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center shadow-sm">
+        <i data-lucide="cookie" class="w-5 h-5 text-white"></i>
+      </div>
+      <div class="leading-tight">
+        <div class="font-bold text-ink-900 text-[15px]">SquarePeople</div>
+        <div class="text-[10px] uppercase tracking-wider text-ink-500/70 font-medium">by Square Feet</div>
+      </div>
+    </div>
+
+    <nav class="flex-1 p-3 space-y-1 overflow-y-auto">
+      <button data-screen="dashboard" class="nav-item active w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-ink-600 hover:bg-cream-100">
+        <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+      </button>
+
+      <div class="pt-4 pb-1 px-3 text-xs font-semibold text-ink-500/60 uppercase tracking-wider">Organization</div>
+      <button data-screen="employees" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-ink-600 hover:bg-cream-100">
+        <i data-lucide="users" class="w-4 h-4"></i> Employees
+      </button>
+      <button data-screen="employee-detail" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-ink-600 hover:bg-cream-100">
+        <i data-lucide="user" class="w-4 h-4"></i> Employee detail
+      </button>
+      <button data-screen="teams" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-ink-600 hover:bg-cream-100">
+        <i data-lucide="users-round" class="w-4 h-4"></i> Teams
+      </button>
+      <button data-screen="departments" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-ink-600 hover:bg-cream-100">
+        <i data-lucide="building-2" class="w-4 h-4"></i> Departments
+      </button>
+
+      <div class="pt-4 pb-1 px-3 text-xs font-semibold text-ink-500/60 uppercase tracking-wider">Work</div>
+      <button data-screen="projects" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-ink-600 hover:bg-cream-100">
+        <i data-lucide="folder-kanban" class="w-4 h-4"></i> Projects
+      </button>
+      <button data-screen="tasks" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-ink-600 hover:bg-cream-100">
+        <i data-lucide="check-square" class="w-4 h-4"></i> Tasks (Kanban)
+      </button>
+
+      <div class="pt-4 pb-1 px-3 text-xs font-semibold text-ink-500/60 uppercase tracking-wider">Time & HR</div>
+      <button data-screen="time" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-ink-600 hover:bg-cream-100">
+        <i data-lucide="timer" class="w-4 h-4"></i> Time tracking
+      </button>
+      <button data-screen="attendance" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-ink-600 hover:bg-cream-100">
+        <i data-lucide="calendar-check" class="w-4 h-4"></i> Attendance
+      </button>
+      <button data-screen="leaves" class="nav-item w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm text-ink-600 hover:bg-cream-100">
+        <i data-lucide="plane" class="w-4 h-4"></i> Leaves
+      </button>
+    </nav>
+
+    <div class="p-3 border-t border-cream-200">
+      <div class="flex items-center gap-3 px-2 py-2">
+        <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center text-white text-sm font-medium">RG</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-ink-900 truncate">Riya Ghosh</div>
+          <div class="text-xs text-ink-500 truncate">Admin</div>
+        </div>
+        <i data-lucide="settings" class="w-4 h-4 text-ink-500/60"></i>
+      </div>
+    </div>
+  </aside>
+
+  <!-- =================== MAIN =================== -->
+  <main class="flex-1 overflow-y-auto">
+
+    <!-- TOPBAR -->
+    <header class="sticky top-0 z-10 bg-white border-b border-cream-200 px-8 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <h1 id="page-title" class="text-xl font-semibold">Dashboard</h1>
+        <span class="text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-800 font-medium inline-flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span>Square Feet LTD
+        </span>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="relative">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-ink-500/60"></i>
+          <input class="pl-9 pr-3 py-2 w-64 rounded-md border border-cream-200 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500" placeholder="Search…" />
+        </div>
+        <button class="p-2 rounded-md hover:bg-cream-100"><i data-lucide="bell" class="w-4 h-4"></i></button>
+        <button class="px-3 py-2 rounded-md bg-brand-500 text-white text-sm font-semibold hover:bg-brand-600 flex items-center gap-1.5">
+          <i data-lucide="plus" class="w-4 h-4"></i> New
+        </button>
+      </div>
+    </header>
+
+    <!-- =================== DASHBOARD =================== -->
+    <section id="dashboard" class="screen active p-8">
+      <div class="grid grid-cols-4 gap-4 mb-6">
+        <!-- Stat cards -->
+        <div class="bg-white p-5 rounded-lg border border-cream-200">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-ink-500 font-medium uppercase tracking-wide">Active Employees</span>
+            <i data-lucide="users" class="w-4 h-4 text-brand-600"></i>
+          </div>
+          <div class="text-3xl font-semibold">142</div>
+          <div class="text-xs text-emerald-600 mt-1 flex items-center gap-1"><i data-lucide="trending-up" class="w-3 h-3"></i> +4 this month</div>
+        </div>
+        <div class="bg-white p-5 rounded-lg border border-cream-200">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-ink-500 font-medium uppercase tracking-wide">In-progress Tasks</span>
+            <i data-lucide="check-square" class="w-4 h-4 text-amber-500"></i>
+          </div>
+          <div class="text-3xl font-semibold">37</div>
+          <div class="text-xs text-ink-500 mt-1">across 8 projects</div>
+        </div>
+        <div class="bg-white p-5 rounded-lg border border-cream-200">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-ink-500 font-medium uppercase tracking-wide">Today's Attendance</span>
+            <i data-lucide="calendar-check" class="w-4 h-4 text-emerald-500"></i>
+          </div>
+          <div class="text-3xl font-semibold">128 / 142</div>
+          <div class="text-xs text-ink-500 mt-1">90% present</div>
+        </div>
+        <div class="bg-white p-5 rounded-lg border border-cream-200">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs text-ink-500 font-medium uppercase tracking-wide">Pending Leaves</span>
+            <i data-lucide="plane" class="w-4 h-4 text-rose-500"></i>
+          </div>
+          <div class="text-3xl font-semibold">6</div>
+          <div class="text-xs text-rose-600 mt-1">2 awaiting your approval</div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-4">
+        <!-- Chart placeholder -->
+        <div class="col-span-2 bg-white p-5 rounded-lg border border-cream-200">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-semibold">Hours logged this week</h3>
+            <span class="text-xs text-ink-500">vs. last week</span>
+          </div>
+          <div class="flex items-end gap-3 h-48">
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="w-full bg-brand-500 rounded-t" style="height: 60%"></div>
+              <span class="text-xs text-ink-500">Mon</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="w-full bg-brand-500 rounded-t" style="height: 75%"></div>
+              <span class="text-xs text-ink-500">Tue</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="w-full bg-brand-500 rounded-t" style="height: 90%"></div>
+              <span class="text-xs text-ink-500">Wed</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="w-full bg-brand-500 rounded-t" style="height: 70%"></div>
+              <span class="text-xs text-ink-500">Thu</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="w-full bg-brand-300 rounded-t" style="height: 45%"></div>
+              <span class="text-xs text-ink-500">Fri</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="w-full bg-cream-200 rounded-t" style="height: 10%"></div>
+              <span class="text-xs text-ink-500/60">Sat</span>
+            </div>
+            <div class="flex-1 flex flex-col items-center gap-2">
+              <div class="w-full bg-cream-200 rounded-t" style="height: 5%"></div>
+              <span class="text-xs text-ink-500/60">Sun</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent activity -->
+        <div class="bg-white p-5 rounded-lg border border-cream-200">
+          <h3 class="font-semibold mb-4">Recent activity</h3>
+          <ul class="space-y-3 text-sm">
+            <li class="flex gap-3">
+              <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0"><i data-lucide="check" class="w-4 h-4"></i></div>
+              <div><span class="font-medium">Maya</span> completed <span class="text-ink-600">"Wire auth middleware"</span><div class="text-xs text-ink-500/60">2h ago</div></div>
+            </li>
+            <li class="flex gap-3">
+              <div class="w-8 h-8 rounded-full bg-brand-100 text-brand-800 flex items-center justify-center flex-shrink-0"><i data-lucide="plane" class="w-4 h-4"></i></div>
+              <div><span class="font-medium">Arjun</span> requested 3 days leave<div class="text-xs text-ink-500/60">4h ago</div></div>
+            </li>
+            <li class="flex gap-3">
+              <div class="w-8 h-8 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0"><i data-lucide="folder-plus" class="w-4 h-4"></i></div>
+              <div>New project <span class="font-medium">"Mobile redesign"</span> created<div class="text-xs text-ink-500/60">yesterday</div></div>
+            </li>
+            <li class="flex gap-3">
+              <div class="w-8 h-8 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center flex-shrink-0"><i data-lucide="user-plus" class="w-4 h-4"></i></div>
+              <div><span class="font-medium">Lin</span> joined the Frontend team<div class="text-xs text-ink-500/60">2d ago</div></div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== EMPLOYEES LIST =================== -->
+    <section id="employees" class="screen p-8">
+      <div class="flex items-center justify-between mb-4">
+        <div>
+          <h2 class="text-lg font-semibold">All employees</h2>
+          <p class="text-sm text-ink-500">142 active across 6 departments</p>
+        </div>
+        <div class="flex gap-2">
+          <button class="px-3 py-2 rounded-md border border-cream-200 text-sm flex items-center gap-1.5 hover:bg-cream-100">
+            <i data-lucide="filter" class="w-4 h-4"></i> Filter
+          </button>
+          <button class="px-3 py-2 rounded-md bg-brand-500 text-white text-sm font-semibold flex items-center gap-1.5 hover:bg-brand-600">
+            <i data-lucide="plus" class="w-4 h-4"></i> Add employee
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-lg border border-cream-200 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-cream-100 text-left text-xs text-ink-500 uppercase tracking-wider">
+            <tr>
+              <th class="px-4 py-3 font-medium">Name</th>
+              <th class="px-4 py-3 font-medium">Department</th>
+              <th class="px-4 py-3 font-medium">Roles</th>
+              <th class="px-4 py-3 font-medium">Status</th>
+              <th class="px-4 py-3 font-medium">Hire date</th>
+              <th class="px-4 py-3"></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-cream-200">
+            <tr class="hover:bg-cream-100">
+              <td class="px-4 py-3 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center text-white text-xs font-medium">MK</div>
+                <div>
+                  <div class="font-medium">Maya Krishnan</div>
+                  <div class="text-xs text-ink-500">maya@squarefeet.com</div>
+                </div>
+              </td>
+              <td class="px-4 py-3">Engineering</td>
+              <td class="px-4 py-3">
+                <span class="text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-800">Senior Dev</span>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-accent-50 text-accent-700">Tech Lead</span>
+              </td>
+              <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Active</span></td>
+              <td class="px-4 py-3 text-ink-500">Mar 2023</td>
+              <td class="px-4 py-3 text-right"><i data-lucide="more-horizontal" class="w-4 h-4 text-ink-500/60"></i></td>
+            </tr>
+            <tr class="hover:bg-cream-100">
+              <td class="px-4 py-3 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-rose-500 flex items-center justify-center text-white text-xs font-medium">AS</div>
+                <div>
+                  <div class="font-medium">Arjun Sharma</div>
+                  <div class="text-xs text-ink-500">arjun@squarefeet.com</div>
+                </div>
+              </td>
+              <td class="px-4 py-3">Design</td>
+              <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full bg-rose-50 text-rose-700">Designer</span></td>
+              <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Active</span></td>
+              <td class="px-4 py-3 text-ink-500">Jan 2024</td>
+              <td class="px-4 py-3 text-right"><i data-lucide="more-horizontal" class="w-4 h-4 text-ink-500/60"></i></td>
+            </tr>
+            <tr class="hover:bg-cream-100">
+              <td class="px-4 py-3 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-brand-300 to-brand-600 flex items-center justify-center text-white text-xs font-medium">LZ</div>
+                <div>
+                  <div class="font-medium">Lin Zhang</div>
+                  <div class="text-xs text-ink-500">lin@squarefeet.com</div>
+                </div>
+              </td>
+              <td class="px-4 py-3">Engineering</td>
+              <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-800">Frontend Dev</span></td>
+              <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>Active</span></td>
+              <td class="px-4 py-3 text-ink-500">2 days ago</td>
+              <td class="px-4 py-3 text-right"><i data-lucide="more-horizontal" class="w-4 h-4 text-ink-500/60"></i></td>
+            </tr>
+            <tr class="hover:bg-cream-100">
+              <td class="px-4 py-3 flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-ink-500 to-brand-900 flex items-center justify-center text-white text-xs font-medium">DK</div>
+                <div>
+                  <div class="font-medium">Desmond Kuet</div>
+                  <div class="text-xs text-ink-500">desmond@squarefeet.com</div>
+                </div>
+              </td>
+              <td class="px-4 py-3">Operations</td>
+              <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-700">Manager</span></td>
+              <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded-full bg-cream-200 text-ink-600 inline-flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-ink-500/40"></span>Inactive</span></td>
+              <td class="px-4 py-3 text-ink-500">Aug 2022</td>
+              <td class="px-4 py-3 text-right"><i data-lucide="more-horizontal" class="w-4 h-4 text-ink-500/60"></i></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="px-4 py-3 border-t border-cream-200 flex items-center justify-between text-xs text-ink-500">
+          <span>Showing 4 of 142</span>
+          <div class="flex gap-1">
+            <button class="px-2 py-1 rounded border border-cream-200">‹</button>
+            <button class="px-2 py-1 rounded bg-brand-500 text-white">1</button>
+            <button class="px-2 py-1 rounded border border-cream-200">2</button>
+            <button class="px-2 py-1 rounded border border-cream-200">3</button>
+            <button class="px-2 py-1 rounded border border-cream-200">›</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== EMPLOYEE DETAIL =================== -->
+    <section id="employee-detail" class="screen p-8">
+      <div class="flex items-start gap-6 mb-6">
+        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-brand-500 to-accent-500 flex items-center justify-center text-white text-2xl font-semibold">MK</div>
+        <div class="flex-1">
+          <div class="flex items-center gap-3 mb-1">
+            <h2 class="text-2xl font-semibold">Maya Krishnan</h2>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">Active</span>
+          </div>
+          <p class="text-sm text-ink-500">Senior Developer · Engineering · Square Feet LTD</p>
+          <div class="flex gap-4 mt-3 text-sm text-ink-600">
+            <span class="flex items-center gap-1.5"><i data-lucide="mail" class="w-4 h-4"></i>maya@squarefeet.com</span>
+            <span class="flex items-center gap-1.5"><i data-lucide="phone" class="w-4 h-4"></i>+91 98765 43210</span>
+            <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-4 h-4"></i>Joined Mar 2023</span>
+          </div>
+        </div>
+        <button class="px-3 py-2 rounded-md border border-cream-200 text-sm flex items-center gap-1.5">
+          <i data-lucide="edit" class="w-4 h-4"></i>Edit
+        </button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="border-b border-cream-200 mb-5">
+        <nav class="flex gap-6 text-sm">
+          <button class="pb-3 border-b-2 border-brand-500 text-brand-700 font-semibold">Profile</button>
+          <button class="pb-3 text-ink-500">Roles</button>
+          <button class="pb-3 text-ink-500">Teams</button>
+          <button class="pb-3 text-ink-500">Tasks <span class="ml-1 text-xs px-1.5 py-0.5 rounded-full bg-cream-200">8</span></button>
+          <button class="pb-3 text-ink-500">Attendance</button>
+          <button class="pb-3 text-ink-500">Leaves</button>
+        </nav>
+      </div>
+
+      <div class="grid grid-cols-3 gap-4">
+        <div class="bg-white p-5 rounded-lg border border-cream-200">
+          <h3 class="font-semibold mb-3">Roles</h3>
+          <div class="flex flex-wrap gap-2">
+            <span class="text-xs px-2 py-1 rounded-full bg-brand-100 text-brand-800">Senior Dev</span>
+            <span class="text-xs px-2 py-1 rounded-full bg-accent-50 text-accent-700">Tech Lead</span>
+            <button class="text-xs px-2 py-1 rounded-full border border-dashed border-cream-300 text-ink-500 hover:bg-cream-100">+ Add role</button>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-lg border border-cream-200">
+          <h3 class="font-semibold mb-3">Teams led</h3>
+          <ul class="text-sm space-y-2">
+            <li class="flex items-center justify-between"><span>Frontend Team</span><span class="text-xs text-ink-500">12 members</span></li>
+            <li class="flex items-center justify-between"><span>Platform Squad</span><span class="text-xs text-ink-500">5 members</span></li>
+          </ul>
+        </div>
+        <div class="bg-white p-5 rounded-lg border border-cream-200">
+          <h3 class="font-semibold mb-3">This month</h3>
+          <ul class="text-sm space-y-2 text-ink-600">
+            <li class="flex justify-between"><span>Hours logged</span><span class="font-medium text-ink-900">132h</span></li>
+            <li class="flex justify-between"><span>Days present</span><span class="font-medium text-ink-900">19 / 20</span></li>
+            <li class="flex justify-between"><span>Tasks completed</span><span class="font-medium text-ink-900">14</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== TEAMS =================== -->
+    <section id="teams" class="screen p-8">
+      <div class="grid grid-cols-3 gap-4">
+        <div class="bg-white p-5 rounded-lg border border-cream-200 hover:shadow-md transition cursor-pointer">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-semibold">Frontend Team</h3>
+            <i data-lucide="more-horizontal" class="w-4 h-4 text-ink-500/60"></i>
+          </div>
+          <p class="text-sm text-ink-500 mb-4">Owns customer-facing web apps</p>
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-6 h-6 rounded-full bg-brand-500 ring-2 ring-white text-white text-xs flex items-center justify-center">M</div>
+            <div class="w-6 h-6 rounded-full bg-emerald-500 ring-2 ring-white text-white text-xs flex items-center justify-center -ml-3">L</div>
+            <div class="w-6 h-6 rounded-full bg-amber-500 ring-2 ring-white text-white text-xs flex items-center justify-center -ml-3">A</div>
+            <div class="w-6 h-6 rounded-full bg-cream-200 text-ink-600 ring-2 ring-white text-xs flex items-center justify-center -ml-3">+9</div>
+          </div>
+          <div class="flex items-center justify-between text-xs text-ink-500">
+            <span>Lead: Maya K.</span><span>3 active projects</span>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-lg border border-cream-200 hover:shadow-md transition cursor-pointer">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-semibold">Backend Team</h3>
+            <i data-lucide="more-horizontal" class="w-4 h-4 text-ink-500/60"></i>
+          </div>
+          <p class="text-sm text-ink-500 mb-4">APIs, infrastructure, data</p>
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-6 h-6 rounded-full bg-accent-500 ring-2 ring-white text-white text-xs flex items-center justify-center">R</div>
+            <div class="w-6 h-6 rounded-full bg-brand-700 ring-2 ring-white text-white text-xs flex items-center justify-center -ml-3">K</div>
+            <div class="w-6 h-6 rounded-full bg-cream-200 text-ink-600 ring-2 ring-white text-xs flex items-center justify-center -ml-3">+6</div>
+          </div>
+          <div class="flex items-center justify-between text-xs text-ink-500">
+            <span>Lead: Rohit V.</span><span>5 active projects</span>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-lg border border-cream-200 hover:shadow-md transition cursor-pointer">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="font-semibold">Design Team</h3>
+            <i data-lucide="more-horizontal" class="w-4 h-4 text-ink-500/60"></i>
+          </div>
+          <p class="text-sm text-ink-500 mb-4">Brand, product, research</p>
+          <div class="flex items-center gap-2 mb-3">
+            <div class="w-6 h-6 rounded-full bg-rose-500 ring-2 ring-white text-white text-xs flex items-center justify-center">A</div>
+            <div class="w-6 h-6 rounded-full bg-accent-700 ring-2 ring-white text-white text-xs flex items-center justify-center -ml-3">S</div>
+            <div class="w-6 h-6 rounded-full bg-cream-200 text-ink-600 ring-2 ring-white text-xs flex items-center justify-center -ml-3">+4</div>
+          </div>
+          <div class="flex items-center justify-between text-xs text-ink-500">
+            <span>Lead: Arjun S.</span><span>2 active projects</span>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-lg border border-dashed border-cream-300 flex items-center justify-center min-h-[180px] cursor-pointer hover:bg-cream-100">
+          <div class="text-center text-ink-500/60">
+            <i data-lucide="plus-circle" class="w-8 h-8 mx-auto mb-2"></i>
+            <div class="text-sm">Create new team</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== DEPARTMENTS =================== -->
+    <section id="departments" class="screen p-8">
+      <div class="bg-white rounded-lg border border-cream-200 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-cream-100 text-left text-xs text-ink-500 uppercase tracking-wider">
+            <tr>
+              <th class="px-4 py-3 font-medium">Name</th>
+              <th class="px-4 py-3 font-medium">Description</th>
+              <th class="px-4 py-3 font-medium">Headcount</th>
+              <th class="px-4 py-3"></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-cream-200">
+            <tr class="hover:bg-cream-100"><td class="px-4 py-3 font-medium">Engineering</td><td class="px-4 py-3 text-ink-600">Builds product</td><td class="px-4 py-3">48</td><td class="px-4 py-3 text-right"><i data-lucide="more-horizontal" class="w-4 h-4 text-ink-500/60"></i></td></tr>
+            <tr class="hover:bg-cream-100"><td class="px-4 py-3 font-medium">Design</td><td class="px-4 py-3 text-ink-600">Brand & product design</td><td class="px-4 py-3">12</td><td class="px-4 py-3 text-right"><i data-lucide="more-horizontal" class="w-4 h-4 text-ink-500/60"></i></td></tr>
+            <tr class="hover:bg-cream-100"><td class="px-4 py-3 font-medium">Operations</td><td class="px-4 py-3 text-ink-600">People, finance, legal</td><td class="px-4 py-3">22</td><td class="px-4 py-3 text-right"><i data-lucide="more-horizontal" class="w-4 h-4 text-ink-500/60"></i></td></tr>
+            <tr class="hover:bg-cream-100"><td class="px-4 py-3 font-medium">Sales</td><td class="px-4 py-3 text-ink-600">Revenue & accounts</td><td class="px-4 py-3">31</td><td class="px-4 py-3 text-right"><i data-lucide="more-horizontal" class="w-4 h-4 text-ink-500/60"></i></td></tr>
+            <tr class="hover:bg-cream-100"><td class="px-4 py-3 font-medium">Support</td><td class="px-4 py-3 text-ink-600">Customer success</td><td class="px-4 py-3">18</td><td class="px-4 py-3 text-right"><i data-lucide="more-horizontal" class="w-4 h-4 text-ink-500/60"></i></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- =================== PROJECTS =================== -->
+    <section id="projects" class="screen p-8">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="bg-white p-5 rounded-lg border border-cream-200">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <h3 class="font-semibold">Mobile redesign</h3>
+              <p class="text-sm text-ink-500 mt-1">Q2 launch · Frontend + Design teams</p>
+            </div>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-700">In progress</span>
+          </div>
+          <div class="space-y-2 mb-3">
+            <div class="flex items-center justify-between text-xs text-ink-500"><span>Progress</span><span>62%</span></div>
+            <div class="h-2 bg-cream-200 rounded-full overflow-hidden"><div class="h-full bg-brand-500 rounded-full" style="width: 62%"></div></div>
+          </div>
+          <div class="flex items-center justify-between text-xs text-ink-500 pt-3 border-t border-cream-200">
+            <span class="flex items-center gap-1.5"><i data-lucide="check-square" class="w-3 h-3"></i>18/29 tasks</span>
+            <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3 h-3"></i>Due Jun 30</span>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-lg border border-cream-200">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <h3 class="font-semibold">Auth v2 (SSO)</h3>
+              <p class="text-sm text-ink-500 mt-1">Backend + Platform teams</p>
+            </div>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700">On track</span>
+          </div>
+          <div class="space-y-2 mb-3">
+            <div class="flex items-center justify-between text-xs text-ink-500"><span>Progress</span><span>34%</span></div>
+            <div class="h-2 bg-cream-200 rounded-full overflow-hidden"><div class="h-full bg-emerald-500 rounded-full" style="width: 34%"></div></div>
+          </div>
+          <div class="flex items-center justify-between text-xs text-ink-500 pt-3 border-t border-cream-200">
+            <span class="flex items-center gap-1.5"><i data-lucide="check-square" class="w-3 h-3"></i>7/21 tasks</span>
+            <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3 h-3"></i>Due Aug 15</span>
+          </div>
+        </div>
+        <div class="bg-white p-5 rounded-lg border border-cream-200">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <h3 class="font-semibold">Analytics dashboard</h3>
+              <p class="text-sm text-ink-500 mt-1">Data + Frontend teams</p>
+            </div>
+            <span class="text-xs px-2 py-0.5 rounded-full bg-rose-50 text-rose-700">At risk</span>
+          </div>
+          <div class="space-y-2 mb-3">
+            <div class="flex items-center justify-between text-xs text-ink-500"><span>Progress</span><span>15%</span></div>
+            <div class="h-2 bg-cream-200 rounded-full overflow-hidden"><div class="h-full bg-rose-500 rounded-full" style="width: 15%"></div></div>
+          </div>
+          <div class="flex items-center justify-between text-xs text-ink-500 pt-3 border-t border-cream-200">
+            <span class="flex items-center gap-1.5"><i data-lucide="check-square" class="w-3 h-3"></i>3/19 tasks</span>
+            <span class="flex items-center gap-1.5"><i data-lucide="calendar" class="w-3 h-3"></i>Due May 20</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== TASKS KANBAN =================== -->
+    <section id="tasks" class="screen p-8">
+      <div class="grid grid-cols-3 gap-4">
+        <!-- Pending -->
+        <div class="bg-cream-200 rounded-lg p-3">
+          <div class="flex items-center justify-between mb-3 px-1">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-ink-500/40"></span>
+              <h3 class="font-semibold text-sm">Pending</h3>
+              <span class="text-xs text-ink-500">4</span>
+            </div>
+            <i data-lucide="plus" class="w-4 h-4 text-ink-500 cursor-pointer"></i>
+          </div>
+          <div class="space-y-2">
+            <div class="bg-white p-3 rounded-md shadow-sm border border-cream-200 cursor-grab">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 font-medium">High</span>
+                <span class="text-xs text-ink-500/60">#142</span>
+              </div>
+              <div class="text-sm font-medium mb-2">Set up CORS middleware</div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-ink-500">Mobile redesign</span>
+                <div class="w-5 h-5 rounded-full bg-brand-500 text-white text-xs flex items-center justify-center">M</div>
+              </div>
+            </div>
+            <div class="bg-white p-3 rounded-md shadow-sm border border-cream-200 cursor-grab">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 font-medium">Medium</span>
+                <span class="text-xs text-ink-500/60">#143</span>
+              </div>
+              <div class="text-sm font-medium mb-2">Wire up axios client</div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-ink-500">Mobile redesign</span>
+                <div class="w-5 h-5 rounded-full bg-emerald-500 text-white text-xs flex items-center justify-center">L</div>
+              </div>
+            </div>
+            <div class="bg-white p-3 rounded-md shadow-sm border border-cream-200 cursor-grab">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-cream-200 text-ink-600 font-medium">Low</span>
+                <span class="text-xs text-ink-500/60">#144</span>
+              </div>
+              <div class="text-sm font-medium mb-2">Set up dark mode toggle</div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-ink-500">Mobile redesign</span>
+                <div class="w-5 h-5 rounded-full bg-rose-500 text-white text-xs flex items-center justify-center">A</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- In progress -->
+        <div class="bg-amber-50/50 rounded-lg p-3">
+          <div class="flex items-center justify-between mb-3 px-1">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+              <h3 class="font-semibold text-sm">In progress</h3>
+              <span class="text-xs text-ink-500">3</span>
+            </div>
+            <i data-lucide="plus" class="w-4 h-4 text-ink-500 cursor-pointer"></i>
+          </div>
+          <div class="space-y-2">
+            <div class="bg-white p-3 rounded-md shadow-sm border border-cream-200 cursor-grab">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-rose-50 text-rose-700 font-medium">High</span>
+                <span class="text-xs text-ink-500/60">#138</span>
+              </div>
+              <div class="text-sm font-medium mb-2">Build employee list view</div>
+              <div class="flex items-center gap-1 mb-2 text-xs text-ink-500">
+                <i data-lucide="git-branch" class="w-3 h-3"></i> 3 subtasks
+              </div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-ink-500">Mobile redesign</span>
+                <div class="w-5 h-5 rounded-full bg-brand-500 text-white text-xs flex items-center justify-center">M</div>
+              </div>
+            </div>
+            <div class="bg-white p-3 rounded-md shadow-sm border border-cream-200 cursor-grab">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 font-medium">Medium</span>
+                <span class="text-xs text-ink-500/60">#139</span>
+              </div>
+              <div class="text-sm font-medium mb-2">Design Kanban drag-drop</div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-ink-500">Mobile redesign</span>
+                <div class="w-5 h-5 rounded-full bg-rose-500 text-white text-xs flex items-center justify-center">A</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Completed -->
+        <div class="bg-emerald-50/50 rounded-lg p-3">
+          <div class="flex items-center justify-between mb-3 px-1">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              <h3 class="font-semibold text-sm">Completed</h3>
+              <span class="text-xs text-ink-500">12</span>
+            </div>
+            <i data-lucide="plus" class="w-4 h-4 text-ink-500 cursor-pointer"></i>
+          </div>
+          <div class="space-y-2">
+            <div class="bg-white p-3 rounded-md shadow-sm border border-cream-200 cursor-grab opacity-75">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 font-medium">Medium</span>
+                <span class="text-xs text-ink-500/60">#136</span>
+              </div>
+              <div class="text-sm font-medium line-through text-ink-500 mb-2">Wire auth middleware</div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-ink-500">Auth v2</span>
+                <div class="w-5 h-5 rounded-full bg-brand-500 text-white text-xs flex items-center justify-center">M</div>
+              </div>
+            </div>
+            <div class="bg-white p-3 rounded-md shadow-sm border border-cream-200 cursor-grab opacity-75">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-cream-200 text-ink-600 font-medium">Low</span>
+                <span class="text-xs text-ink-500/60">#135</span>
+              </div>
+              <div class="text-sm font-medium line-through text-ink-500 mb-2">Set up Sequelize models</div>
+              <div class="flex items-center justify-between">
+                <span class="text-xs text-ink-500">Auth v2</span>
+                <div class="w-5 h-5 rounded-full bg-accent-500 text-white text-xs flex items-center justify-center">R</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== TIME TRACKING =================== -->
+    <section id="time" class="screen p-8">
+      <!-- Active timer card -->
+      <div class="bg-gradient-to-br from-brand-600 via-brand-500 to-accent-500 text-white p-6 rounded-lg mb-6 flex items-center justify-between">
+        <div>
+          <div class="text-xs uppercase tracking-wider opacity-80 mb-1">Currently tracking</div>
+          <div class="text-lg font-medium">Build employee list view</div>
+          <div class="text-sm opacity-80">Mobile redesign · #138</div>
+        </div>
+        <div class="text-right">
+          <div class="font-mono text-4xl font-semibold tabular-nums">01:23:47</div>
+          <div class="flex gap-2 mt-3 justify-end">
+            <button class="px-3 py-1.5 rounded-md bg-white/20 hover:bg-white/30 text-sm flex items-center gap-1.5"><i data-lucide="pause" class="w-3.5 h-3.5"></i>Pause</button>
+            <button class="px-3 py-1.5 rounded-md bg-white text-brand-700 text-sm font-semibold flex items-center gap-1.5"><i data-lucide="square" class="w-3.5 h-3.5"></i>Stop</button>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="font-semibold mb-3">Today's logs</h3>
+      <div class="bg-white rounded-lg border border-cream-200 overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-cream-100 text-left text-xs text-ink-500 uppercase tracking-wider">
+            <tr>
+              <th class="px-4 py-3 font-medium">Task</th>
+              <th class="px-4 py-3 font-medium">Project</th>
+              <th class="px-4 py-3 font-medium">Start</th>
+              <th class="px-4 py-3 font-medium">End</th>
+              <th class="px-4 py-3 font-medium text-right">Duration</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-cream-200">
+            <tr><td class="px-4 py-3 font-medium">Build employee list view</td><td class="px-4 py-3 text-ink-600">Mobile redesign</td><td class="px-4 py-3 text-ink-500">10:42 AM</td><td class="px-4 py-3 text-ink-500/60">— in progress</td><td class="px-4 py-3 text-right font-mono">01:23:47</td></tr>
+            <tr><td class="px-4 py-3 font-medium">Wire auth middleware</td><td class="px-4 py-3 text-ink-600">Auth v2</td><td class="px-4 py-3 text-ink-500">9:15 AM</td><td class="px-4 py-3 text-ink-500">10:38 AM</td><td class="px-4 py-3 text-right font-mono">01:23:00</td></tr>
+            <tr><td class="px-4 py-3 font-medium">Standup notes</td><td class="px-4 py-3 text-ink-600">—</td><td class="px-4 py-3 text-ink-500">9:00 AM</td><td class="px-4 py-3 text-ink-500">9:15 AM</td><td class="px-4 py-3 text-right font-mono">00:15:00</td></tr>
+          </tbody>
+          <tfoot class="bg-cream-100">
+            <tr><td colspan="4" class="px-4 py-3 text-xs font-medium text-ink-600 uppercase tracking-wider">Total today</td><td class="px-4 py-3 text-right font-mono font-semibold">03:01:47</td></tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- =================== ATTENDANCE =================== -->
+    <section id="attendance" class="screen p-8">
+      <div class="grid grid-cols-3 gap-4 mb-6">
+        <!-- Punch card -->
+        <div class="bg-white p-6 rounded-lg border border-cream-200 text-center">
+          <div class="text-xs uppercase tracking-wider text-ink-500 mb-2">Today</div>
+          <div class="text-3xl font-semibold mb-1">10:42 AM</div>
+          <div class="text-xs text-ink-500 mb-4">Signed in 2h 5m ago</div>
+          <button class="w-full py-3 rounded-md bg-rose-600 hover:bg-rose-700 text-white font-medium flex items-center justify-center gap-2">
+            <i data-lucide="log-out" class="w-4 h-4"></i>Sign out
+          </button>
+        </div>
+        <div class="col-span-2 bg-white p-6 rounded-lg border border-cream-200">
+          <h3 class="font-semibold mb-4">May 2026</h3>
+          <div class="grid grid-cols-7 gap-1 text-center">
+            <div class="text-xs text-ink-500/60 font-medium pb-2">M</div>
+            <div class="text-xs text-ink-500/60 font-medium pb-2">T</div>
+            <div class="text-xs text-ink-500/60 font-medium pb-2">W</div>
+            <div class="text-xs text-ink-500/60 font-medium pb-2">T</div>
+            <div class="text-xs text-ink-500/60 font-medium pb-2">F</div>
+            <div class="text-xs text-ink-500/60 font-medium pb-2">S</div>
+            <div class="text-xs text-ink-500/60 font-medium pb-2">S</div>
+            <!-- empty for offset (May 1 = Friday) -->
+            <div></div><div></div><div></div><div></div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">1</div>
+            <div class="aspect-square rounded-md bg-cream-100 text-ink-500/60 text-xs flex items-center justify-center">2</div>
+            <div class="aspect-square rounded-md bg-cream-100 text-ink-500/60 text-xs flex items-center justify-center">3</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">4</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">5</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">6</div>
+            <div class="aspect-square rounded-md bg-rose-100 text-rose-700 text-xs flex items-center justify-center font-medium">7</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">8</div>
+            <div class="aspect-square rounded-md bg-cream-100 text-ink-500/60 text-xs flex items-center justify-center">9</div>
+            <div class="aspect-square rounded-md bg-cream-100 text-ink-500/60 text-xs flex items-center justify-center">10</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">11</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">12</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">13</div>
+            <div class="aspect-square rounded-md bg-amber-100 text-amber-700 text-xs flex items-center justify-center font-medium">14</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">15</div>
+            <div class="aspect-square rounded-md bg-cream-100 text-ink-500/60 text-xs flex items-center justify-center">16</div>
+            <div class="aspect-square rounded-md bg-cream-100 text-ink-500/60 text-xs flex items-center justify-center">17</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">18</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">19</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">20</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">21</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">22</div>
+            <div class="aspect-square rounded-md bg-cream-100 text-ink-500/60 text-xs flex items-center justify-center">23</div>
+            <div class="aspect-square rounded-md bg-cream-100 text-ink-500/60 text-xs flex items-center justify-center">24</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">25</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">26</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">27</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">28</div>
+            <div class="aspect-square rounded-md bg-emerald-100 text-emerald-700 text-xs flex items-center justify-center font-medium">29</div>
+            <div class="aspect-square rounded-md bg-cream-100 text-ink-500/60 text-xs flex items-center justify-center">30</div>
+            <div class="aspect-square rounded-md bg-cream-100 text-ink-500/60 text-xs flex items-center justify-center">31</div>
+          </div>
+          <div class="flex gap-4 mt-4 text-xs text-ink-600">
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-100"></span>Present</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-100"></span>Late</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-rose-100"></span>Leave</span>
+            <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-cream-100 border border-cream-200"></span>Off-day</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =================== LEAVES =================== -->
+    <section id="leaves" class="screen p-8">
+      <!-- Approval queue -->
+      <div class="bg-white rounded-lg border border-cream-200 mb-6">
+        <div class="px-5 py-4 border-b border-cream-200 flex items-center justify-between">
+          <div>
+            <h3 class="font-semibold">Pending approvals</h3>
+            <p class="text-xs text-ink-500">Awaiting your decision</p>
+          </div>
+          <span class="text-xs px-2 py-0.5 rounded-full bg-rose-50 text-rose-700">2 pending</span>
+        </div>
+        <ul class="divide-y divide-cream-200">
+          <li class="p-5 flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-rose-500 flex items-center justify-center text-white font-medium">AS</div>
+            <div class="flex-1">
+              <div class="font-medium">Arjun Sharma <span class="text-xs text-ink-500 font-normal">· Designer</span></div>
+              <div class="text-sm text-ink-600">3 days · Annual leave · May 12 – May 14</div>
+              <div class="text-xs text-ink-500/60 mt-0.5">Family event — submitted 4h ago</div>
+            </div>
+            <button class="px-3 py-1.5 rounded-md border border-cream-200 text-sm hover:bg-cream-100">Reject</button>
+            <button class="px-3 py-1.5 rounded-md bg-emerald-600 text-white text-sm hover:bg-emerald-700">Approve</button>
+          </li>
+          <li class="p-5 flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-brand-300 to-brand-600 flex items-center justify-center text-white font-medium">LZ</div>
+            <div class="flex-1">
+              <div class="font-medium">Lin Zhang <span class="text-xs text-ink-500 font-normal">· Frontend Dev</span></div>
+              <div class="text-sm text-ink-600">1 day · Sick leave · May 6</div>
+              <div class="text-xs text-ink-500/60 mt-0.5">Submitted 1h ago</div>
+            </div>
+            <button class="px-3 py-1.5 rounded-md border border-cream-200 text-sm hover:bg-cream-100">Reject</button>
+            <button class="px-3 py-1.5 rounded-md bg-emerald-600 text-white text-sm hover:bg-emerald-700">Approve</button>
+          </li>
+        </ul>
+      </div>
+
+      <!-- My requests -->
+      <div class="bg-white rounded-lg border border-cream-200">
+        <div class="px-5 py-4 border-b border-cream-200 flex items-center justify-between">
+          <h3 class="font-semibold">My requests</h3>
+          <button class="px-3 py-1.5 rounded-md bg-brand-500 text-white text-sm font-semibold flex items-center gap-1.5 hover:bg-brand-600">
+            <i data-lucide="plus" class="w-4 h-4"></i>Request leave
+          </button>
+        </div>
+        <table class="w-full text-sm">
+          <thead class="bg-cream-100 text-left text-xs text-ink-500 uppercase tracking-wider">
+            <tr>
+              <th class="px-5 py-3 font-medium">Type</th>
+              <th class="px-5 py-3 font-medium">Dates</th>
+              <th class="px-5 py-3 font-medium">Days</th>
+              <th class="px-5 py-3 font-medium">Status</th>
+              <th class="px-5 py-3 font-medium">Submitted</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-cream-200">
+            <tr><td class="px-5 py-3"><span class="text-xs px-2 py-0.5 rounded bg-brand-50 text-brand-700">Annual</span></td><td class="px-5 py-3">Jun 10 – Jun 14</td><td class="px-5 py-3">5</td><td class="px-5 py-3"><span class="text-xs px-2 py-0.5 rounded bg-amber-50 text-amber-700">Pending</span></td><td class="px-5 py-3 text-ink-500">2 days ago</td></tr>
+            <tr><td class="px-5 py-3"><span class="text-xs px-2 py-0.5 rounded bg-rose-50 text-rose-700">Sick</span></td><td class="px-5 py-3">Apr 22</td><td class="px-5 py-3">1</td><td class="px-5 py-3"><span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">Approved</span></td><td class="px-5 py-3 text-ink-500">2 weeks ago</td></tr>
+            <tr><td class="px-5 py-3"><span class="text-xs px-2 py-0.5 rounded bg-brand-50 text-brand-700">Annual</span></td><td class="px-5 py-3">Mar 15 – Mar 18</td><td class="px-5 py-3">4</td><td class="px-5 py-3"><span class="text-xs px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">Approved</span></td><td class="px-5 py-3 text-ink-500">2 months ago</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  lucide.createIcons();
+
+  const titles = {
+    dashboard: 'Dashboard',
+    employees: 'Employees',
+    'employee-detail': 'Employee detail',
+    teams: 'Teams',
+    departments: 'Departments',
+    projects: 'Projects',
+    tasks: 'Tasks — Kanban',
+    time: 'Time tracking',
+    attendance: 'Attendance',
+    leaves: 'Leaves',
+  };
+
+  document.querySelectorAll('.nav-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.screen;
+      document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(target).classList.add('active');
+      document.getElementById('page-title').textContent = titles[target] || '';
+      lucide.createIcons();
+    });
+  });
+</script>
+
+</body>
+</html>
