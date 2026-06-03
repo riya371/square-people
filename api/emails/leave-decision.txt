@@ -1,0 +1,9 @@
+Hi {{employeeName}},
+
+Your leave request was {{decision}}.
+
+- Type: {{leaveType}}
+- Dates: {{startDate}} to {{endDate}} ({{days}} day{{daysPlural}})
+- Note: {{reason}}
+
+— SquarePeople by Cookie Tech

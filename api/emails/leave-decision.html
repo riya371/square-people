@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><title>Leave {{decision}}</title></head>
+<body style="font-family:'Plus Jakarta Sans',sans-serif;background:#fffbf5;color:#402729;padding:24px;">
+  <div style="max-width:480px;margin:0 auto;background:#fff;border:1px solid #efbd89;border-radius:8px;padding:32px;">
+    <div style="font-weight:700;font-size:18px;color:#7a4f08;margin-bottom:24px;">SquarePeople <span style="font-weight:400;color:#bd834c;font-size:12px;">by Square Feet</span></div>
+    <h1 style="font-size:20px;margin:0 0 12px;">Your leave request was {{decision}}</h1>
+    <p style="line-height:1.6;margin:0 0 12px;">Hi {{employeeName}},</p>
+    <ul style="line-height:1.7;margin:0 0 16px;">
+      <li>Type: <strong>{{leaveType}}</strong></li>
+      <li>Dates: <strong>{{startDate}}</strong> &ndash; <strong>{{endDate}}</strong> ({{days}} day{{daysPlural}})</li>
+      <li>Decision: <strong>{{decision}}</strong></li>
+      <li>Note: {{reason}}</li>
+    </ul>
+  </div>
+</body></html>

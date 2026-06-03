@@ -1,0 +1,8 @@
+You're invited to join {{companyName}} on SquarePeople.
+
+{{inviterName}} added you as {{role}}.
+
+Accept the invite (expires in 7 days):
+{{acceptUrl}}
+
+— SquarePeople by Cookie Tech

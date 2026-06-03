@@ -1,0 +1,10 @@
+New leave request
+
+{{employeeName}} submitted a leave request:
+- Type: {{leaveType}}
+- Dates: {{startDate}} to {{endDate}} ({{days}} day{{daysPlural}})
+- Reason: {{reason}}
+
+Review at: {{reviewUrl}}
+
+— SquarePeople by Cookie Tech
