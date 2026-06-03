@@ -91,6 +91,16 @@ cd api && npm install
 cd ../frontend && npm install
 ```
 
+### 3e. Seed demo data (recommended)
+Load two ready-made Bangladeshi demo companies (employees, teams, projects, tasks,
+attendance, time logs, leaves, and an activity feed):
+```bash
+cd api && npm run seed
+```
+> ⚠️ `npm run seed` **drops and recreates every table**, then inserts fresh demo data.
+> Dev only — never run it against data you care about. Re-run any time to reset to a
+> clean demo state. Logins it creates are listed in §5.
+
 ---
 
 ## 4. Running the app
@@ -118,37 +128,49 @@ Then open **http://localhost:5173** in your browser.
 
 ## 5. Logging in to test the system
 
-### ⚡ Seeded accounts — fast login (this machine's `squarepeople_dev`)
+### ⚡ Seeded accounts — fast login (after `npm run seed`)
 
-A ready-made, **data-rich tenant** — `Square Feet LTD` (workspace `square-feet`) — is
-already in the local DB, full of sample employees, teams, projects, tasks, attendance,
-and leave requests. Log straight in with:
+The seeder creates two Bangladeshi demo companies. **All accounts use password
+`Test1234` and PIN `1234`.**
 
-**Email + password** → go to **http://localhost:5173/login**
+**Square Feet LTD** — workspace `square-feet` — the data-rich tenant (employees, teams,
+projects, kanban tasks, attendance, time logs, leaves, activity feed):
+
+**Email + password** → **http://localhost:5173/login**
 
 | Role | Email | Password |
 |------|-------|----------|
-| **Owner** (full access) | `desmond@squarefeet.com` | `Test1234` |
-| **Member** (limited access) | `newhire@squarefeet.com` | `Test1234` |
+| **Owner** (full access) | `tanvir@squarefeet.xyz` | `Test1234` |
+| **Admin** | `nusrat@squarefeet.xyz` | `Test1234` |
+| **Manager** (approves leaves) | `rakib@squarefeet.xyz` | `Test1234` |
+| **Member** (limited access) | `sadia@squarefeet.xyz` | `Test1234` |
 
-> A workspace slug is only requested if the same email belongs to more than one company.
-> For the accounts above you can leave it blank; if asked, use `square-feet`.
+**Jamuna Retail Ltd** — workspace `jamuna-retail` (second tenant, lighter data):
+
+| Role | Email | Password |
+|------|-------|----------|
+| **Owner** | `shahidul@jamunaretail.com` | `Test1234` |
+
+> A workspace slug is only requested if one email exists in more than one company.
+> These emails are unique, so you can leave it blank.
 
 **Employee PIN / kiosk login** → login page → **"Employee PIN"** tab
 
-| Role | Workspace | Employee ID | PIN |
-|------|-----------|-------------|-----|
-| Owner | `square-feet` | `EMP-0001` | `1234` |
-| Member | `square-feet` | `EMP-0007` | `1234` |
+| Person | Workspace | Employee ID | PIN |
+|--------|-----------|-------------|-----|
+| Tanvir Ahmed (owner) | `square-feet` | `EMP-0001` | `1234` |
+| Nusrat Jahan (admin) | `square-feet` | `EMP-0002` | `1234` |
+| Rakib Hasan (manager) | `square-feet` | `EMP-0003` | `1234` |
+| Sadia Islam (member) | `square-feet` | `EMP-0004` | `1234` |
 
-> These accounts exist only in the DB on **this** machine. A fresh `squarepeople_dev`
-> created elsewhere won't have them — register instead (below).
+> These accounts exist only after you've run `npm run seed` (§3e). On a fresh DB without
+> seeding, register a new company instead (below).
 
 ### 📝 Manual login (step by step)
 
 **Standard login**
 1. Open **http://localhost:5173/login**.
-2. Enter email + password (e.g. `desmond@squarefeet.com` / `Test1234`).
+2. Enter email + password (e.g. `tanvir@squarefeet.xyz` / `Test1234`).
 3. *(Only if prompted)* pick or type the workspace `square-feet`.
 4. Click **Sign in** → you land on the Dashboard.
 
@@ -202,7 +224,7 @@ Once logged in, the full workflow works end-to-end:
 | Frontend loads but every request fails / CORS error | API isn't running, or `FRONTEND_URL` in `api/.env` ≠ `http://localhost:5173`, or `VITE_API_BASE_URL` ≠ `http://localhost:3000`. |
 | Login succeeds but you're bounced back to /login | Cookies blocked. Use `http://localhost` (not `127.0.0.1`) in the browser so cookie domain matches; keep `COOKIE_SECURE=false` for local http. |
 | Invite / password-reset email "didn't arrive" | With `MAIL_DRIVER=console` the link is **printed in the API terminal** — copy it from there. (Set up Resend for real email.) |
-| Forgot the test password | Reset it: `node -e "console.log(require('bcryptjs').hashSync('NewPass123',10))"` then `psql squarepeople_dev -c "UPDATE users SET password_hash='<hash>' WHERE email='desmond@squarefeet.com';"` |
+| Forgot the test password | Reset it: `node -e "console.log(require('bcryptjs').hashSync('NewPass123',10))"` then `psql squarepeople_dev -c "UPDATE users SET password_hash='<hash>' WHERE email='tanvir@squarefeet.xyz';"` (or just re-run `npm run seed`) |
 
 ---
 
