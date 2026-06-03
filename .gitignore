@@ -13,5 +13,6 @@ dist-ssr/
 .DS_Store
 *.log
 
-# Playwright MCP artifacts
+# Local tooling / editor config
 .playwright-mcp/
+.claude/
