@@ -9,7 +9,9 @@ import StatusPill from '@/components/dashboard/StatusPill.vue'
 import RequestLeaveDialog from '@/components/forms/RequestLeaveDialog.vue'
 import RejectLeaveDialog from '@/components/forms/RejectLeaveDialog.vue'
 import { useLeavesStore } from '@/stores/leaves'
+import { useAuthStore } from '@/stores/auth'
 
+const auth = useAuthStore()
 const route = useRoute()
 const router = useRouter()
 const store = useLeavesStore()
@@ -53,7 +55,7 @@ function handleCancel(id) {
 
 <template>
   <section class="p-4 sm:p-6 lg:p-8">
-    <div class="bg-white rounded-lg border border-cream-200 mb-6">
+    <div v-if="auth.can('leaves.approve')" class="bg-white rounded-lg border border-cream-200 mb-6">
       <div class="px-5 py-4 border-b border-cream-200 flex items-center justify-between flex-wrap gap-2">
         <div>
           <h3 class="font-semibold">Pending approvals</h3>

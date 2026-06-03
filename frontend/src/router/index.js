@@ -21,10 +21,10 @@ const router = createRouter({
       redirect: '/app/dashboard',
       children: [
         { path: 'dashboard',     name: 'dashboard',       meta: { title: 'Dashboard' },        component: () => import('@/views/dashboard/Dashboard.vue') },
-        { path: 'employees',     name: 'employees',       meta: { title: 'Employees' },        component: () => import('@/views/dashboard/EmployeesList.vue') },
-        { path: 'employees/:id', name: 'employee-detail', meta: { title: 'Employee detail' },  component: () => import('@/views/dashboard/EmployeeDetail.vue'), props: true },
+        { path: 'employees',     name: 'employees',       meta: { title: 'Employees', minRole: 'manager' },        component: () => import('@/views/dashboard/EmployeesList.vue') },
+        { path: 'employees/:id', name: 'employee-detail', meta: { title: 'Employee detail', minRole: 'manager' },  component: () => import('@/views/dashboard/EmployeeDetail.vue'), props: true },
         { path: 'teams',         name: 'teams',           meta: { title: 'Teams' },            component: () => import('@/views/dashboard/Teams.vue') },
-        { path: 'departments',   name: 'departments',     meta: { title: 'Departments' },      component: () => import('@/views/dashboard/Departments.vue') },
+        { path: 'departments',   name: 'departments',     meta: { title: 'Departments', minRole: 'admin' },      component: () => import('@/views/dashboard/Departments.vue') },
         { path: 'projects',      name: 'projects',        meta: { title: 'Projects' },         component: () => import('@/views/dashboard/Projects.vue') },
         { path: 'tasks',         name: 'tasks',           meta: { title: 'Tasks — Kanban' },   component: () => import('@/views/dashboard/TasksKanban.vue') },
         { path: 'time',          name: 'time',            meta: { title: 'Time tracking' },    component: () => import('@/views/dashboard/TimeTracking.vue') },
@@ -45,6 +45,11 @@ router.beforeEach(async (to) => {
   }
   if (to.matched.some((r) => r.meta.requiresAuth) && !auth.signedIn) {
     return { name: 'login', query: { from: to.fullPath } }
+  }
+  // Role gate: block pages above the user's role (e.g. a member opening /app/employees).
+  const minRole = to.matched.reduce((acc, r) => r.meta.minRole || acc, null)
+  if (minRole && auth.signedIn && !auth.atLeast(minRole)) {
+    return { name: 'dashboard' }
   }
   // If a signed-in user lands on /login or /signup, redirect into the app.
   if (auth.signedIn && ['login', 'signup', 'signup-company'].includes(to.name)) {

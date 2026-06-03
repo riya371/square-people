@@ -10,10 +10,12 @@ import DataTable from '@/components/dashboard/DataTable.vue'
 import Pagination from '@/components/dashboard/Pagination.vue'
 import CreateEmployeeDialog from '@/components/forms/CreateEmployeeDialog.vue'
 import { useEmployeesStore } from '@/stores/employees'
+import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute()
 const router = useRouter()
 const store = useEmployeesStore()
+const auth = useAuthStore()
 const { list: employees, loading } = storeToRefs(store)
 
 const createOpen = ref(false)
@@ -59,7 +61,7 @@ function statusLabel(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''
         <button class="px-3 py-2 rounded-md border border-cream-200 text-sm flex items-center gap-1.5 hover:bg-cream-100">
           <Filter class="w-4 h-4" /> <span class="hidden sm:inline">Filter</span>
         </button>
-        <button @click="openCreate" class="px-3 py-2 rounded-md bg-brand-500 text-white text-sm font-semibold flex items-center gap-1.5 hover:bg-brand-600">
+        <button v-if="auth.can('employees.manage')" @click="openCreate" class="px-3 py-2 rounded-md bg-brand-500 text-white text-sm font-semibold flex items-center gap-1.5 hover:bg-brand-600">
           <Plus class="w-4 h-4" /> <span class="hidden sm:inline">Add employee</span>
         </button>
       </div>

@@ -30,14 +30,20 @@ async function copySlug() {
 defineEmits(['toggle-sidebar'])
 
 const ROUTE_TO_NEW = {
-  employees: { label: 'New employee', to: { name: 'employees', query: { create: '1' } } },
-  teams: { label: 'New team', to: { name: 'teams', query: { create: '1' } } },
-  departments: { label: 'New department', to: { name: 'departments', query: { create: '1' } } },
-  projects: { label: 'New project', to: { name: 'projects', query: { create: '1' } } },
+  employees: { label: 'New employee', cap: 'employees.manage', to: { name: 'employees', query: { create: '1' } } },
+  teams: { label: 'New team', cap: 'teams.manage', to: { name: 'teams', query: { create: '1' } } },
+  departments: { label: 'New department', cap: 'departments.manage', to: { name: 'departments', query: { create: '1' } } },
+  projects: { label: 'New project', cap: 'projects.manage', to: { name: 'projects', query: { create: '1' } } },
   tasks: { label: 'New task', to: { name: 'tasks', query: { create: '1' } } },
   leaves: { label: 'Request leave', to: { name: 'leaves', query: { create: '1' } } },
 }
-const newAction = computed(() => ROUTE_TO_NEW[route.name] || null)
+// Only show the CTA when the route has an action AND the role permits it.
+const newAction = computed(() => {
+  const a = ROUTE_TO_NEW[route.name]
+  if (!a) return null
+  if (a.cap && !authStore.can(a.cap)) return null
+  return a
+})
 function goCreate() { if (newAction.value) router.push(newAction.value.to) }
 </script>
 

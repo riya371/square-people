@@ -1,6 +1,7 @@
 <script setup>
 import RoleChip from './RoleChip.vue'
 import { useEmployeesStore } from '@/stores/employees'
+import { useAuthStore } from '@/stores/auth'
 
 const props = defineProps({
   employee: { type: Object, required: true },
@@ -8,6 +9,7 @@ const props = defineProps({
 const emit = defineEmits(['add-role', 'changed'])
 
 const store = useEmployeesStore()
+const auth = useAuthStore()
 
 async function removeRole(role) {
   if (!window.confirm(`Remove the "${role.label}" role from ${props.employee.name}?`)) return
@@ -24,10 +26,11 @@ async function removeRole(role) {
         v-for="r in employee.roles"
         :key="r.id ?? r.label"
         :tone="r.tone"
-        removable
+        :removable="auth.can('employees.manage')"
         @remove="removeRole(r)"
       >{{ r.label }}</RoleChip>
       <button
+        v-if="auth.can('employees.manage')"
         @click="$emit('add-role')"
         class="text-xs px-2 py-1 rounded-full border border-dashed border-cream-300 text-ink-500 hover:bg-cream-100"
       >+ Add role</button>

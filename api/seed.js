@@ -285,7 +285,7 @@ async function seedSquareFeet() {
 
   // Activity feed (audit log) — most recent first
   await audit(company, uTanvir, 'user', 'login_pin', uTanvir.id, addDays(now, 0));
-  await audit(company, uSadia, 'task', 'create', '#101', new Date(now.getTime() - 2 * 3600e3));
+  await audit(company, uSadia, 'task', 'create', '101', new Date(now.getTime() - 2 * 3600e3));
   await audit(company, uRakib, 'task', 'kanban_move', t4.task_id, new Date(now.getTime() - 3 * 3600e3));
   await audit(company, uSadia, 'leaverequest', 'create', lvSadia.leave_id, new Date(now.getTime() - 5 * 3600e3));
   await audit(company, uRakib, 'leaverequest', 'approve', lvMahmud.leave_id, addDays(now, -1));

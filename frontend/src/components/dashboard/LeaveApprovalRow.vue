@@ -1,5 +1,8 @@
 <script setup>
 import Avatar from './Avatar.vue'
+import { useAuthStore } from '@/stores/auth'
+
+const auth = useAuthStore()
 
 defineProps({
   leave: { type: Object, required: true },
@@ -26,7 +29,7 @@ const TYPE_LABEL = { annual: 'Annual leave', sick: 'Sick leave', unpaid: 'Unpaid
         </div>
       </div>
     </div>
-    <div class="flex gap-2 sm:flex-shrink-0">
+    <div v-if="auth.can('leaves.approve')" class="flex gap-2 sm:flex-shrink-0">
       <button
         class="flex-1 sm:flex-initial px-3 py-1.5 rounded-md border border-cream-200 text-sm hover:bg-cream-100"
         @click="$emit('reject', leave.id)"

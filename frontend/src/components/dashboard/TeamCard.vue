@@ -2,11 +2,14 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { MoreHorizontal, Pencil, Users, Trash2 } from '@lucide/vue'
 import AvatarStack from './AvatarStack.vue'
+import { useAuthStore } from '@/stores/auth'
 
 defineProps({
   team: { type: Object, required: true },
 })
 const emit = defineEmits(['edit', 'members', 'delete'])
+
+const auth = useAuthStore()
 
 const menuOpen = ref(false)
 const root = ref(null)
@@ -29,7 +32,7 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
   <div class="bg-white p-5 rounded-lg border border-cream-200 hover:shadow-md transition">
     <div class="flex items-center justify-between mb-3">
       <h3 class="font-semibold">{{ team.name }}</h3>
-      <div class="relative" ref="root">
+      <div v-if="auth.can('teams.manage')" class="relative" ref="root">
         <button
           type="button"
           @click.stop="toggle"

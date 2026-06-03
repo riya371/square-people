@@ -4,6 +4,7 @@ import {
   FolderKanban, CheckSquare, Timer, CalendarCheck, Plane,
 } from '@lucide/vue'
 
+// `min` = minimum role to see the nav item (omitted = visible to everyone).
 export const NAV_SECTIONS = [
   {
     items: [
@@ -13,9 +14,9 @@ export const NAV_SECTIONS = [
   {
     label: 'Organization',
     items: [
-      { to: { name: 'employees' },   icon: Users,      label: 'Employees' },
+      { to: { name: 'employees' },   icon: Users,      label: 'Employees',   min: 'manager' },
       { to: { name: 'teams' },       icon: UsersRound, label: 'Teams' },
-      { to: { name: 'departments' }, icon: Building2,  label: 'Departments' },
+      { to: { name: 'departments' }, icon: Building2,  label: 'Departments', min: 'admin' },
     ],
   },
   {

@@ -13,9 +13,11 @@ import EmployeeRolesTab from '@/components/dashboard/EmployeeRolesTab.vue'
 import EditEmployeeDialog from '@/components/forms/EditEmployeeDialog.vue'
 import AddRolePopover from '@/components/forms/AddRolePopover.vue'
 import { useEmployeesStore } from '@/stores/employees'
+import { useAuthStore } from '@/stores/auth'
 
 const props = defineProps({ id: { type: String, required: true } })
 const store = useEmployeesStore()
+const auth = useAuthStore()
 const employee = ref(null)
 
 async function load(id) {
@@ -72,7 +74,7 @@ function onRoleAssigned() {
           </span>
         </div>
       </div>
-      <button @click="editOpen = true" class="px-3 py-2 rounded-md border border-cream-200 text-sm flex items-center gap-1.5 hover:bg-cream-100">
+      <button v-if="auth.can('employees.manage')" @click="editOpen = true" class="px-3 py-2 rounded-md border border-cream-200 text-sm flex items-center gap-1.5 hover:bg-cream-100">
         <Edit class="w-4 h-4" /> Edit
       </button>
     </div>
@@ -85,6 +87,7 @@ function onRoleAssigned() {
         <div class="flex flex-wrap gap-2">
           <RoleChip v-for="r in employee.roles" :key="r.label" :tone="r.tone">{{ r.label }}</RoleChip>
           <button
+            v-if="auth.can('employees.manage')"
             @click="addRoleOpen = true"
             class="text-xs px-2 py-1 rounded-full border border-dashed border-cream-300 text-ink-500 hover:bg-cream-100"
           >+ Add role</button>

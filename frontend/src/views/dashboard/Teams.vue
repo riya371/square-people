@@ -10,10 +10,12 @@ import EditTeamDialog from '@/components/forms/EditTeamDialog.vue'
 import ManageTeamMembersDialog from '@/components/forms/ManageTeamMembersDialog.vue'
 import Dialog from '@/components/ui/Dialog.vue'
 import { useTeamsStore } from '@/stores/teams'
+import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute()
 const router = useRouter()
 const store = useTeamsStore()
+const auth = useAuthStore()
 const { list: teams, loading } = storeToRefs(store)
 onMounted(() => store.fetchList())
 
@@ -85,7 +87,7 @@ async function confirmDelete() {
           <span v-else>{{ teams.length }} total</span>
         </p>
       </div>
-      <button @click="openCreate" class="px-3 py-2 rounded-md bg-brand-500 text-white text-sm font-semibold flex items-center gap-1.5 hover:bg-brand-600">
+      <button v-if="auth.can('teams.manage')" @click="openCreate" class="px-3 py-2 rounded-md bg-brand-500 text-white text-sm font-semibold flex items-center gap-1.5 hover:bg-brand-600">
         <Plus class="w-4 h-4" /> <span class="hidden sm:inline">New team</span>
       </button>
     </div>
@@ -99,7 +101,7 @@ async function confirmDelete() {
         @members="openMembers"
         @delete="openDelete"
       />
-      <EmptyCreateCard label="Create new team" @click="openCreate" />
+      <EmptyCreateCard v-if="auth.can('teams.manage')" label="Create new team" @click="openCreate" />
     </div>
 
     <CreateTeamDialog

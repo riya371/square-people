@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { http, setOnAuthError } from '@/lib/http'
+import { roleAtLeast, hasCap } from '@/lib/permissions'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)         // { id, email, role, companyId, employeeId, lastLoginAt }
@@ -11,6 +12,12 @@ export const useAuthStore = defineStore('auth', () => {
   const error = ref(null)
 
   const signedIn = computed(() => !!user.value)
+  const role = computed(() => user.value?.role || null)
+
+  // Role/capability helpers — used to gate the UI. The API still enforces writes.
+  function atLeast(minRole) { return roleAtLeast(role.value, minRole) }
+  function can(cap) { return hasCap(role.value, cap) }
+
   const initials = computed(() => {
     const name = employee.value?.name || user.value?.email || ''
     if (!name) return '?'
@@ -125,7 +132,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     user, company, employee, permissions, loading, error,
-    signedIn, initials,
+    signedIn, role, initials, atLeast, can,
     fetchMe, login, employeeLogin, signup, logout, forceLogout, forgotPassword, resetPassword,
   }
 })

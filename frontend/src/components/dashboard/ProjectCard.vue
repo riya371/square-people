@@ -2,11 +2,14 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { CheckSquare, Calendar, MoreHorizontal, Pencil, Activity, Link2, Trash2 } from '@lucide/vue'
 import StatusPill from './StatusPill.vue'
+import { useAuthStore } from '@/stores/auth'
 
 const props = defineProps({
   project: { type: Object, required: true },
 })
 const emit = defineEmits(['edit', 'status', 'teams', 'delete'])
+
+const auth = useAuthStore()
 
 const STATUS_OPTIONS = [
   { value: 'on-track', label: 'On track' },
@@ -54,7 +57,7 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
       </div>
       <div class="flex items-center gap-2">
         <StatusPill :tone="project.status">{{ statusLabel }}</StatusPill>
-        <div class="relative" ref="root">
+        <div v-if="auth.can('projects.manage')" class="relative" ref="root">
           <button
             type="button"
             @click.stop="toggle"
@@ -87,10 +90,10 @@ onUnmounted(() => document.removeEventListener('click', onDocClick))
                 </button>
               </div>
             </div>
-            <button type="button" @click="choose('teams')" class="w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-cream-50">
+            <button v-if="auth.can('projects.delete')" type="button" @click="choose('teams')" class="w-full flex items-center gap-2 px-3 py-2 text-sm text-left hover:bg-cream-50">
               <Link2 class="w-4 h-4 text-ink-500" /> Link teams
             </button>
-            <button type="button" @click="choose('delete')" class="w-full flex items-center gap-2 px-3 py-2 text-sm text-left text-rose-600 hover:bg-rose-50">
+            <button v-if="auth.can('projects.delete')" type="button" @click="choose('delete')" class="w-full flex items-center gap-2 px-3 py-2 text-sm text-left text-rose-600 hover:bg-rose-50">
               <Trash2 class="w-4 h-4" /> Delete
             </button>
           </div>

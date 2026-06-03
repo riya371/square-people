@@ -1,12 +1,22 @@
 <script setup>
+import { computed } from 'vue'
 import { Cookie } from '@lucide/vue'
 import { NAV_SECTIONS } from './nav.js'
 import SidebarNavItem from './SidebarNavItem.vue'
 import SidebarSectionLabel from './SidebarSectionLabel.vue'
 import UserMenu from './UserMenu.vue'
+import { useAuthStore } from '@/stores/auth'
 
 defineProps({ open: { type: Boolean, default: false } })
 const emit = defineEmits(['navigate'])
+
+const auth = useAuthStore()
+// Hide nav items above the current role; drop sections left empty.
+const sections = computed(() =>
+  NAV_SECTIONS
+    .map((s) => ({ ...s, items: s.items.filter((i) => !i.min || auth.atLeast(i.min)) }))
+    .filter((s) => s.items.length),
+)
 </script>
 
 <template>
@@ -28,7 +38,7 @@ const emit = defineEmits(['navigate'])
     </div>
 
     <nav class="flex-1 p-3 overflow-y-auto space-y-1">
-      <template v-for="(section, idx) in NAV_SECTIONS" :key="idx">
+      <template v-for="(section, idx) in sections" :key="idx">
         <SidebarSectionLabel v-if="section.label">{{ section.label }}</SidebarSectionLabel>
         <SidebarNavItem
           v-for="item in section.items"

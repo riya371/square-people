@@ -8,10 +8,12 @@ import CreateProjectDialog from '@/components/forms/CreateProjectDialog.vue'
 import EditProjectDialog from '@/components/forms/EditProjectDialog.vue'
 import Dialog from '@/components/ui/Dialog.vue'
 import { useProjectsStore } from '@/stores/projects'
+import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute()
 const router = useRouter()
 const store = useProjectsStore()
+const auth = useAuthStore()
 const { list: projects, loading } = storeToRefs(store)
 onMounted(() => store.fetchList())
 
@@ -90,7 +92,7 @@ async function confirmDelete() {
           <span v-else>{{ projects.length }} total</span>
         </p>
       </div>
-      <button @click="openCreate" class="px-3 py-2 rounded-md bg-brand-500 text-white text-sm font-semibold flex items-center gap-1.5 hover:bg-brand-600">
+      <button v-if="auth.can('projects.manage')" @click="openCreate" class="px-3 py-2 rounded-md bg-brand-500 text-white text-sm font-semibold flex items-center gap-1.5 hover:bg-brand-600">
         <Plus class="w-4 h-4" /> <span class="hidden sm:inline">New project</span>
       </button>
     </div>
