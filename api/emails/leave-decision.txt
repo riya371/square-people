@@ -6,4 +6,4 @@ Your leave request was {{decision}}.
 - Dates: {{startDate}} to {{endDate}} ({{days}} day{{daysPlural}})
 - Note: {{reason}}
 
-— SquarePeople by Cookie Tech
+— SquarePeople by square-feet

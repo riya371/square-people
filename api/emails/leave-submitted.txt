@@ -7,4 +7,4 @@ New leave request
 
 Review at: {{reviewUrl}}
 
-— SquarePeople by Cookie Tech
+— SquarePeople by square-feet

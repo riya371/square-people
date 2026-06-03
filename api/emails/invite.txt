@@ -5,4 +5,4 @@ You're invited to join {{companyName}} on SquarePeople.
 Accept the invite (expires in 7 days):
 {{acceptUrl}}
 
-— SquarePeople by Cookie Tech
+— SquarePeople by square-feet

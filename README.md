@@ -1,6 +1,6 @@
 # SquarePeople
 
-A multi-tenant workforce-management SaaS (Cookie Tech). Companies manage employees,
+A multi-tenant workforce-management SaaS (square-feet). Companies manage employees,
 teams, departments, projects, a tasks kanban, time tracking, attendance, and leave
 approvals from one dashboard.
 
